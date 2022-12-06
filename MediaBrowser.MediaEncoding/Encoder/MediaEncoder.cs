@@ -75,7 +75,8 @@ namespace MediaBrowser.MediaEncoding.Encoder
         private bool _isVaapiDeviceInteli965 = false;
         private bool _isVaapiDeviceSupportVulkanFmtModifier = false;
 
-        private static string[] _vulkanFmtModifierExts = {
+        private static string[] _vulkanFmtModifierExts =
+        {
             "VK_KHR_sampler_ycbcr_conversion",
             "VK_EXT_image_drm_format_modifier",
             "VK_KHR_external_memory_fd",
@@ -633,7 +634,6 @@ namespace MediaBrowser.MediaEncoding.Encoder
 
             return imageResolutionParameter;
         }
-
 
         private async Task<string> ExtractImageInternal(string inputPath, string container, MediaStream videoStream, int? imageStreamIndex, Video3DFormat? threedFormat, TimeSpan? offset, bool useIFrame, ImageFormat? targetFormat, CancellationToken cancellationToken)
         {
