@@ -3157,5 +3157,28 @@ namespace Emby.Server.Implementations.Library
 
             CollectionFolder.SaveLibraryOptions(virtualFolderPath, libraryOptions);
         }
+
+        public bool IsFolderEmpty(Folder folder, IDirectoryService directoryService = null)
+        {
+            ArgumentNullException.ThrowIfNull(folder);
+
+            directoryService ??= new DirectoryService(_fileSystem);
+
+            try
+            {
+                FileSystemMetadata[] files = FileData.GetFilteredFileSystemEntries(directoryService, folder.Path, _fileSystem, _appHost, _logger, new ItemResolveArgs(_configurationManager.ApplicationPaths, directoryService), flattenFolderDepth: 0, resolveShortcuts: true);
+
+                if (files.Any())
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Information, "Could not access path: \"{0}\"; {1}", folder.Path, ex.Message);
+            }
+
+            return true;
+        }
     }
 }
