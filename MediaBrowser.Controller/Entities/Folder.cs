@@ -486,7 +486,7 @@ namespace MediaBrowser.Controller.Entities
                     }
                 });
 
-                if (container != null)
+                if (container is not null)
                 {
                     await RefreshAllMetadataForContainer(container, refreshOptions, innerProgress, cancellationToken).ConfigureAwait(false);
                 }
@@ -518,7 +518,7 @@ namespace MediaBrowser.Controller.Entities
                 async () =>
                 {
                     var series = container as Series;
-                    if (series != null)
+                    if (series is not null)
                     {
                         await series.RefreshMetadata(refreshOptions, cancellationToken).ConfigureAwait(false);
                     }
@@ -532,7 +532,7 @@ namespace MediaBrowser.Controller.Entities
         {
             var container = child as IMetadataContainer;
 
-            if (container != null)
+            if (container is not null)
             {
                 await RefreshAllMetadataForContainer(container, refreshOptions, progress, cancellationToken).ConfigureAwait(false);
             }
@@ -706,7 +706,7 @@ namespace MediaBrowser.Controller.Entities
                 IEnumerable<BaseItem> items;
                 Func<BaseItem, bool> filter = i => UserViewBuilder.Filter(i, user, query, UserDataManager, LibraryManager);
 
-                if (query.User == null)
+                if (query.User is null)
                 {
                     items = GetRecursiveChildren(filter);
                 }
@@ -744,7 +744,7 @@ namespace MediaBrowser.Controller.Entities
             IEnumerable<BaseItem> itemsList = LibraryManager.GetItemList(query);
             var user = query.User;
 
-            if (user != null)
+            if (user is not null)
             {
                 // needed for boxsets
                 itemsList = itemsList.Where(i => i.IsVisibleStandalone(query.User));
@@ -964,7 +964,7 @@ namespace MediaBrowser.Controller.Entities
 
             IEnumerable<BaseItem> items;
 
-            if (query.User == null)
+            if (query.User is null)
             {
                 items = Children.Where(filter);
             }
@@ -987,7 +987,7 @@ namespace MediaBrowser.Controller.Entities
             var user = query.User;
 
             // Check recursive - don't substitute in plain folder views
-            if (user != null)
+            if (user is not null)
             {
                 items = CollapseBoxSetItemsIfNeeded(items, query, this, user, ConfigurationManager, CollectionManager);
             }
@@ -1072,7 +1072,7 @@ namespace MediaBrowser.Controller.Entities
 
             if (!param.HasValue)
             {
-                if (user != null && !configurationManager.Configuration.EnableGroupingIntoCollections)
+                if (user is not null && !configurationManager.Configuration.EnableGroupingIntoCollections)
                 {
                     return false;
                 }
@@ -1314,7 +1314,7 @@ namespace MediaBrowser.Controller.Entities
             }
 
             // If there are not sub-folders, proceed as normal.
-            if (children == null)
+            if (children is null)
             {
                 children = GetEligibleChildrenForRecursiveChildren(user);
             }
@@ -1323,7 +1323,7 @@ namespace MediaBrowser.Controller.Entities
             {
                 bool? isVisibleToUser = null;
 
-                if (query == null || UserViewBuilder.FilterItem(child, query))
+                if (query is null || UserViewBuilder.FilterItem(child, query))
                 {
                     isVisibleToUser = child.IsVisible(user);
 
@@ -1348,7 +1348,7 @@ namespace MediaBrowser.Controller.Entities
             {
                 foreach (var child in GetLinkedChildren(user))
                 {
-                    if (query == null || UserViewBuilder.FilterItem(child, query))
+                    if (query is null || UserViewBuilder.FilterItem(child, query))
                     {
                         if (child.IsVisible(user))
                         {
@@ -1405,7 +1405,7 @@ namespace MediaBrowser.Controller.Entities
         {
             foreach (var child in Children)
             {
-                if (filter == null || filter(child))
+                if (filter is null || filter(child))
                 {
                     result[child.Id] = child;
                 }
@@ -1423,7 +1423,7 @@ namespace MediaBrowser.Controller.Entities
             {
                 foreach (var child in GetLinkedChildren())
                 {
-                    if (filter == null || filter(child))
+                    if (filter is null || filter(child))
                     {
                         result[child.Id] = child;
                     }
@@ -1444,7 +1444,7 @@ namespace MediaBrowser.Controller.Entities
             {
                 var child = GetLinkedChild(i);
 
-                if (child != null)
+                if (child is not null)
                 {
                     list.Add(child);
                 }
@@ -1470,7 +1470,7 @@ namespace MediaBrowser.Controller.Entities
 
                 var child = GetLinkedChild(i);
 
-                if (child != null && child.Id.Equals(itemId))
+                if (child is not null && child.Id.Equals(itemId))
                 {
                     return true;
                 }
@@ -1481,7 +1481,7 @@ namespace MediaBrowser.Controller.Entities
 
         public List<BaseItem> GetLinkedChildren(User user)
         {
-            if (!FilterLinkedChildrenPerUser || user == null)
+            if (!FilterLinkedChildrenPerUser || user is null)
             {
                 return GetLinkedChildren();
             }
@@ -1507,7 +1507,7 @@ namespace MediaBrowser.Controller.Entities
             {
                 var child = GetLinkedChild(i);
 
-                if (child == null)
+                if (child is null)
                 {
                     continue;
                 }
@@ -1550,7 +1550,7 @@ namespace MediaBrowser.Controller.Entities
         {
             return LinkedChildren
                 .Select(i => new Tuple<LinkedChild, BaseItem>(i, GetLinkedChild(i)))
-                .Where(i => i.Item2 != null);
+                .Where(i => i.Item2 is not null);
         }
 
         protected override async Task<bool> RefreshedOwnedItems(MetadataRefreshOptions options, IReadOnlyList<FileSystemMetadata> fileSystemChildren, CancellationToken cancellationToken)
@@ -1608,7 +1608,7 @@ namespace MediaBrowser.Controller.Entities
                             return null;
                         }
                     })
-                    .Where(i => i != null)
+                    .Where(i => i is not null)
                     .ToList();
 
                 var currentShortcutLinks = LinkedChildren.Where(i => i.Type == LinkedChildType.Shortcut).ToList();
@@ -1665,7 +1665,7 @@ namespace MediaBrowser.Controller.Entities
                 {
                     // The querying doesn't support virtual unaired
                     var episode = item as Episode;
-                    if (episode != null && episode.IsUnaired)
+                    if (episode is not null && episode.IsUnaired)
                     {
                         continue;
                     }
@@ -1722,7 +1722,7 @@ namespace MediaBrowser.Controller.Entities
                 return;
             }
 
-            if (itemDto != null)
+            if (itemDto is not null)
             {
                 if (fields.ContainsField(ItemFields.RecursiveItemCount))
                 {
